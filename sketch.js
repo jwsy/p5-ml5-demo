@@ -1,14 +1,3 @@
-// Copyright (c) 2018 ml5
-//
-// This software is released under the MIT License.
-// https://opensource.org/licenses/MIT
-
-/* ===
-ml5 Example
-Webcam Image Classification using MobileNet and p5.js
-This example uses a callback pattern to create the classifier
-=== */
-
 let classifier;
 let video;
 
@@ -43,7 +32,7 @@ function setup() {
   // Initialize the Image Classifier method with MobileNet and the video as the second argument
   classifier = ml5.imageClassifier('MobileNet', video, modelReady);  
   button = createButton('Take a snapshot');
-  button.position(0, 300);
+  button.position(0, 320);
   button.mousePressed(snapshot);
 }
 
@@ -80,8 +69,6 @@ function gotResult(err, results) {
 }
 
 function snapshot() {
-  // bgCol = random(255);
-  // t = null;
   img = image(video, 0, 300, 320, 230);
   
   classifier.predict(img, function(err, results) {
@@ -90,14 +77,14 @@ function snapshot() {
     }
     else {
       console.log(results);
-      // output = results[0].className + "\nprobability " + nf(results[0].probability, 0, 2);
       output = results.map(e => {
         return e.className + " (" + nf(e.probability, 0, 2) + ")"
       }).join("\n");
       console.log(output)
       
+      noStroke();
       fill('rgb(255,255,255)');
-      rect(0, 230, 320, 60);
+      rect(0, 240, 320, 60);
       fill(0)
       textAlign(CENTER);
       text(output, 160, 250);
