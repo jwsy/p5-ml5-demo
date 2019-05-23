@@ -37,7 +37,7 @@ function setup() {
 }
 
 function draw() {
- image(video, 0, 0, 240, 180);
+ image(video, 20, 0, 260, 180);
  fill(bgCol);
  // rect(75,190,50,50);
   
@@ -64,12 +64,23 @@ function classifyVideo() {
 function gotResult(err, results) {
   // The results are in an array ordered by probability.
   select('#result').html(results[0].className);
+  // console.log(results[0].className);
+  const desiredClasses = [
+    'mortarboard', 'banjo', 'hotdog', 'hot dog'
+  ];
+  select('#result').style('background-color', '').style('font-size', '1em');
+  for (c in desiredClasses) {
+    if (results[0].className.includes(desiredClasses[c])) {
+        select('#result').style('background-color', 'red').style('font-size', '3em');
+    }
+  } 
+
   select('#probability').html(nf(results[0].probability, 0, 2));
   classifyVideo();
 }
 
 function snapshot() {
-  img = image(video, 0, 300, 320, 230);
+  img = image(video, 20, 300, 340, 230);
   
   classifier.predict(img, function(err, results) {
     if (err) {
@@ -84,10 +95,10 @@ function snapshot() {
       
       noStroke();
       fill('rgb(255,255,255)');
-      rect(0, 240, 320, 60);
+      rect(00, 240, 360, 60);
       fill(0)
       textAlign(CENTER);
-      text(output, 160, 250);
+      text(output, 180, 250);
     }
   });
 }
