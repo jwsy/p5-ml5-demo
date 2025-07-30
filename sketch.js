@@ -33,7 +33,8 @@ function setup() {
   // Initialize the Image Classifier method with MobileNet and the video as the second argument
   classifier = ml5.imageClassifier('MobileNet', video, modelReady);  
   button = createButton('Take a snapshot');
-  button.position(20, 350);
+  // place the snapshot button below the video display
+  button.position(20, video.height + 20);
   button.mousePressed(snapshot);
 }
 
@@ -102,6 +103,8 @@ function snapshot() {
       fill(0)
       textAlign(CENTER);
       text(output, 180, 250);
+      // resume the continuous video classification loop
+      classifyVideo();
     }
   });
 }
