@@ -4,12 +4,14 @@ let video;
 let bgCol = 0;
 
 let button;
+let cnv;
 let t;
 let output = "";
 
 function setup() {
-  
-  createCanvas(640,600);
+
+  cnv = createCanvas(640,600);
+  cnv.parent('canvas-container');
   
   if (isMobileDevice()) {
         console.log("mobile device");
@@ -32,8 +34,7 @@ function setup() {
   
   // Initialize the Image Classifier method with MobileNet and the video as the second argument
   classifier = ml5.imageClassifier('MobileNet', video, modelReady);  
-  button = createButton('Take a snapshot');
-  button.position(20, 350);
+  button = select('#snapshotButton');
   button.mousePressed(snapshot);
 }
 
@@ -102,6 +103,8 @@ function snapshot() {
       fill(0)
       textAlign(CENTER);
       text(output, 180, 250);
+      // resume the continuous video classification loop
+      classifyVideo();
     }
   });
 }
