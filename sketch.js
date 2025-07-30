@@ -12,7 +12,7 @@ function setup() {
   createCanvas(640,600);
   
   if (isMobileDevice()) {
-  	console.log("mobile device");
+        console.log("mobile device");
   var constraints = {
     audio: false,
     video: {
@@ -21,12 +21,13 @@ function setup() {
       }
     }
   };
-  
+
   video = createCapture(constraints);
   } else {
-  	console.log("NOT mobile device");
+        console.log("NOT mobile device");
     video = createCapture(VIDEO);
   }
+  video.size(320, 240); // ensure the captured video has a known resolution
   video.hide();
   
   // Initialize the Image Classifier method with MobileNet and the video as the second argument
@@ -37,7 +38,7 @@ function setup() {
 }
 
 function draw() {
- image(video, 20, 0, 260, 180);
+ image(video, 20, 0, video.width, video.height);
  fill(bgCol);
  // rect(75,190,50,50);
   
@@ -80,7 +81,9 @@ function gotResult(err, results) {
 }
 
 function snapshot() {
-  img = image(video, 20, 300, 340, 230);
+  // draw the current frame at its actual size
+  image(video, 20, 300, video.width, video.height);
+  const img = video.get();
   
   classifier.predict(img, function(err, results) {
     if (err) {
