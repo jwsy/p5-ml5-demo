@@ -4,17 +4,15 @@ let video;
 let bgCol = 0;
 
 let button;
-let cnv;
 let t;
 let output = "";
 
 function setup() {
-
-  cnv = createCanvas(640,600);
-  cnv.parent('canvas-container');
+  
+  createCanvas(640,600);
   
   if (isMobileDevice()) {
-        console.log("mobile device");
+  	console.log("mobile device");
   var constraints = {
     audio: false,
     video: {
@@ -23,23 +21,23 @@ function setup() {
       }
     }
   };
-
+  
   video = createCapture(constraints);
   } else {
-        console.log("NOT mobile device");
+  	console.log("NOT mobile device");
     video = createCapture(VIDEO);
   }
-  video.size(320, 240); // ensure the captured video has a known resolution
   video.hide();
   
   // Initialize the Image Classifier method with MobileNet and the video as the second argument
   classifier = ml5.imageClassifier('MobileNet', video, modelReady);  
-  button = select('#snapshotButton');
+  button = createButton('Take a snapshot');
+  button.position(20, 350);
   button.mousePressed(snapshot);
 }
 
 function draw() {
- image(video, 20, 0, video.width, video.height);
+ image(video, 20, 0, 260, 180);
  fill(bgCol);
  // rect(75,190,50,50);
   
@@ -82,9 +80,7 @@ function gotResult(err, results) {
 }
 
 function snapshot() {
-  // draw the current frame at its actual size
-  image(video, 20, 300, video.width, video.height);
-  const img = video.get();
+  img = image(video, 20, 300, 340, 230);
   
   classifier.predict(img, function(err, results) {
     if (err) {
@@ -103,8 +99,6 @@ function snapshot() {
       fill(0)
       textAlign(CENTER);
       text(output, 180, 250);
-      // resume the continuous video classification loop
-      classifyVideo();
     }
   });
 }
