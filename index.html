@@ -30,6 +30,8 @@
   <script>
     let classifier;
     let video;
+    let videoW = 0;
+    let videoH = 0;
 
     let bgCol = 0;
 
@@ -45,21 +47,27 @@
       if (isMobileDevice()) {
         select('#device-emoji').html('📱');
         console.log("mobile device");
-      var constraints = {
-        audio: false,
-        video: {
-          facingMode: "environment"
-        }
-      };
-      
-      video = createCapture(constraints);
+        var constraints = {
+          audio: false,
+          video: {
+            facingMode: "environment"
+          }
+        };
+
+        video = createCapture(constraints);
       } else {
         select('#device-emoji').html('💻');
         console.log("NOT mobile device");
         video = createCapture(VIDEO);
       }
+
+      video.elt.onloadedmetadata = () => {
+        videoW = video.elt.videoWidth;
+        videoH = video.elt.videoHeight;
+        select('#camera-dimensions').html(`${videoW}x${videoH}`);
+      };
+
       video.hide();
-      select('#camera-dimensions').html(video.width + 'x' + video.height);
       
       
       // Initialize the Image Classifier method with MobileNet and the video as the second argument
@@ -70,10 +78,14 @@
     }
 
     function draw() {
-     image(video, 20, 0, 260, 180);
+     if (videoW && videoH) {
+       const displayWidth = 260;
+       const displayHeight = displayWidth * videoH / videoW;
+       image(video, 20, 0, displayWidth, displayHeight);
+     }
      fill(bgCol);
      // rect(75,190,50,50);
-      
+
     }
 
     function isMobileDevice() {
